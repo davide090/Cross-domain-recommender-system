@@ -12,6 +12,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import uniroma3.it.sii.wikidata.WikidataManager;
+
 public class ProvaMain {
 
 
@@ -19,16 +21,15 @@ public class ProvaMain {
 
 	public static void main(String[] args) throws IOException {
 
+		
+		WikidataManager w = new WikidataManager();
+		
+		String a = w.getLatitude("Rome", "Italy");
+		String b = w.getLongitude("Rome", "Italy");
+		
+		System.out.println(a);
+		System.out.println(b);
 
-		String s = "davide_pluto_pippo[davide, pluto, pippo]";
-		s = s.replaceAll(" ", "");
-		List<String> words = Arrays.asList(s.substring(s.indexOf("[")+1, s.indexOf("]")).split(","));
-		
-		System.out.println(words);
-		for(String a : words)
-			System.out.println(a);
-		
-		System.out.println("sottostringa: " + s.substring(0, s.indexOf("[")) + " di ---> " + s);
 	}
 
 

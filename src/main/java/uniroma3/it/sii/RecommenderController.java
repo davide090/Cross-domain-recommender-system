@@ -52,10 +52,21 @@ public class RecommenderController {
 		//lista di filepath con i file wikidata (creati a partire dalla scelta dell'utente)
 		List<String> filesData = fetchWikidata(attractions, citta, paese);
 
+		List<String> filesOrderedData = new ArrayList<>();
+		WikidataManager wiki = new WikidataManager();
 
-		//lista di filepath con i file wikidata ordinati in base alla distanza dalla posizione dell'utente
-		List<String> filesOrderedData = fetchOrderedWikidata(attractions, city, latitude, longitude, raggio);
+		if(wiki.userInCity(citta, latitude, longitude)) {
+			//lista di filepath con i file wikidata ordinati in base alla distanza dalla posizione dell'utente
+			filesOrderedData.addAll(fetchOrderedWikidata(attractions, city, latitude, longitude, raggio));
+		}
+		else {
 
+			latitude = wiki.getLatitude(citta, paese);
+			longitude = wiki.getLongitude(citta, paese);
+
+			filesOrderedData.addAll(fetchOrderedWikidata(attractions, city, latitude, longitude, raggio));
+
+		}
 
 		List<String> res1 = recommendation1(filesFB, filesData);
 		List<String> results1 = new ArrayList<>();
@@ -134,6 +145,7 @@ public class RecommenderController {
 
 		return "results";
 	}
+
 
 
 
@@ -224,9 +236,9 @@ public class RecommenderController {
 
 
 	private String orderedDataToFile(List<String> filesOrderedData) throws IOException {
-		
+
 		Configuration conf = Configuration.getInstance();
-		
+
 		File tmp = new File(conf.getResourcePath() + "tmpOrdered.txt");
 
 		FileWriter fw = new FileWriter(tmp);
@@ -274,7 +286,7 @@ public class RecommenderController {
 			rows.add(new NameDistanceRow(name, distance));
 			currentLine = reader.readLine();
 		}
-		
+
 		Configuration conf = Configuration.getInstance();
 
 		File sorted = new File(conf.getResourcePath() + "sortedtmp.txt");

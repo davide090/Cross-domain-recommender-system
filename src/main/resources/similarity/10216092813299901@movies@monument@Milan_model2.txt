@@ -1,0 +1,13 @@
+Dunkirk/Arch_of_Peace:0.27225496510661396
+Dunkirk/Porta_Romana:0.23919062899587248
+Dunkirk/equestrian_statue_of_Napoléon_III:0.2768764618027163
+Dunkirk/Monument_of_the_Five_Days_of_Milan:0.3447806001836644
+Dunkirk/Monumento_ai_Caduti_di_Niguarda:0.22196707572784913
+Dunkirk/Verziere_Column:0.18689198795531334
+Dunkirk/Arch_of_Peace:0.27225496510661396
+Dunkirk/monument_to_Victor_Emmanuel_II:0.2957388278623053
+Dunkirk/Monument_to_Alessandro_Manzoni:0.25672937180339167
+Dunkirk/Tree_of_Life:0.3103490762493964
+Dunkirk/Civico_Mausoleo_Palanti:0.19827911027251105
+Dunkirk/Shoah_memorial:0.2906887457736496
+Dunkirk/Verziere_Column:0.18689198795531334

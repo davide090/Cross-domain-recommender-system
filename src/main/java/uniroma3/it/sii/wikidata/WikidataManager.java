@@ -1,6 +1,7 @@
 package uniroma3.it.sii.wikidata;
 
 import java.io.File;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -696,13 +697,13 @@ public class WikidataManager {
 
 
 
-
+	//check user position and returns if user is fisically in "city"
 	public boolean userInCity(String city, String latitude, String longitude) {
 
 
 
 		String queryString = this.prefixes + "SELECT DISTINCT * WHERE {\n" + 
-				"  ?place (wdt:P31/wdt:P279*) wd:Q3957.\n" + 
+				"  ?place (wdt:P31/wdt:P279*) wd:Q515.\n" + 
 				"  ?place rdfs:label ?label.\n" + 
 				"  SERVICE wikibase:around {\n" + 
 				"    ?place wdt:P625 ?location.\n" + 
@@ -721,14 +722,14 @@ public class WikidataManager {
 		ResultSet results = qexec.execSelect() ;
 
 		boolean inCity = false;
-		
+
 		for(; results.hasNext(); ) {
 			QuerySolution sol = results.nextSolution();
 			RDFNode name = sol.get("label") ;
-			
-			System.out.println("label: " + name.toString() + ", city: " + city + ", boolean: " + name.toString().equals(city));
-			
-			if(name.toString().equals(city))
+
+			System.out.println("----------> label: " + cleanResults(name) + ", city: " + city + ", boolean: " + cleanResults(name).equals(city));
+
+			if(cleanResults(name).equals(city))
 				inCity = true;
 
 
@@ -740,6 +741,85 @@ public class WikidataManager {
 
 	}
 
+
+
+
+	public String getLatitude(String citta, String paese) {
+
+		String countryid = getCountryID(paese).substring(28);
+
+		String queryString = this.prefixes + 
+				"SELECT DISTINCT ?item ?itemDescription ?coord WHERE {\n" + 
+				"  ?item ?label \"" + citta + "\"@en.\n" + 
+				"   ?item (wdt:P31/wdt:P279*) wd:Q56061.\n" + 
+				"  ?item wdt:P17 wd:"+ countryid + ".\n" +  
+				"?item wdt:P625 ?coord.\n" +                
+				"  SERVICE wikibase:label { bd:serviceParam wikibase:language \"en,it\". }\n" + 
+				"}";
+
+		Query query = QueryFactory.create(queryString) ;
+
+		QueryEngineHTTP qexec = QueryExecutionFactory.createServiceRequest(sparqlService, query);
+		ResultSet results = qexec.execSelect() ;
+
+		String res = "";
+
+		if(results.hasNext()) {
+
+			QuerySolution sol = results.nextSolution();
+			RDFNode id = sol.get("coord") ;
+			res = extractLatitude(id.toString());
+			return res;
+		}
+
+		return res;
+	}
+
+	
+	
+
+	public String getLongitude(String citta, String paese) {
+		String countryid = getCountryID(paese).substring(28);
+
+		String queryString = this.prefixes + 
+				"SELECT DISTINCT ?item ?itemDescription ?coord WHERE {\n" + 
+				"  ?item ?label \"" + citta + "\"@en.\n" + 
+				"   ?item (wdt:P31/wdt:P279*) wd:Q56061.\n" + 
+				"  ?item wdt:P17 wd:"+ countryid + ".\n" +  
+				"?item wdt:P625 ?coord.\n" +                
+				"  SERVICE wikibase:label { bd:serviceParam wikibase:language \"en,it\". }\n" + 
+				"}";
+
+		Query query = QueryFactory.create(queryString) ;
+
+		QueryEngineHTTP qexec = QueryExecutionFactory.createServiceRequest(sparqlService, query);
+		ResultSet results = qexec.execSelect() ;
+
+		String res = "";
+
+		if(results.hasNext()) {
+
+			QuerySolution sol = results.nextSolution();
+			RDFNode id = sol.get("coord") ;
+			res = extractLongitude(id.toString());
+			return res;
+		}
+
+		return res;
+	}
+
+
+
+	private String extractLatitude(String string) {
+
+		return string.substring(string.indexOf("(") +1 , string.indexOf(")")).split(" ")[1];
+	}
+
+	private String extractLongitude(String string) {
+
+		return string.substring(string.indexOf("(") +1 , string.indexOf(")")).split(" ")[0];
+		
+	}
 
 
 	//Getters & Setters
