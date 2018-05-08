@@ -1,0 +1,97 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:b="http://bootsfaces.net/ui">
+<head>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<title>Results</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+
+	<div id="container" class="container">
+
+
+		<br />
+		<p>
+			<font size="5"><b>Points of interest recommended for you!
+			</b></font>
+		</p>
+
+		<br /> <br /> <a href="http://localhost:5000/">Home</a> <br />
+
+		<div id="liste" align="center">
+
+			<!-- <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+				<div th:if="${list1 != null}">
+					<h1>Results 1</h1>
+					<br />
+					<ul>
+						<th:block th:object="${item}" th:each="item : ${list1}">
+							<li th:text="${item}">Item description here...</li>
+						</th:block>
+					</ul>
+				</div>
+			</div> -->
+
+
+			<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+				<div th:if="${tot != null}">
+					<h1>Total Results</h1>
+					<br />
+					<ul>
+						<th:block th:object="${item}" th:each="item : ${tot}">
+							<li th:text="${item}">Item description here...</li>
+						</th:block>
+					</ul>
+				</div>
+			</div>
+
+
+
+			<!-- <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+				<div th:if="${list2 != null}">
+					<h1>Results 2</h1>
+					<br />
+					<ul>
+						<th:block th:object="${item}" th:each="item : ${list2}">
+							<li th:text="${item}">Item description here...</li>
+						</th:block>
+					</ul>
+				</div>
+			</div> -->
+
+
+			<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+				<div th:if="${totOrdered != null}">
+					<h1>Tot Ordered</h1>
+					<br />
+					<ul>
+						<th:block th:object="${item}" th:each="item : ${totOrdered}">
+							<li th:text="${item}">Item description here...</li>
+						</th:block>
+					</ul>
+				</div>
+			</div>
+
+			<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+				<div th:if="${totOrderedDavide != null}">
+					<h1>Tot Ordered Davide</h1>
+					<br />
+					<ul>
+						<th:block th:object="${item}" th:each="item : ${totOrderedDavide}">
+							<li th:text="${item}">Item description here...</li>
+						</th:block>
+					</ul>
+				</div>
+			</div>
+
+
+		</div>
+	</div>
+</body>
+</html>
