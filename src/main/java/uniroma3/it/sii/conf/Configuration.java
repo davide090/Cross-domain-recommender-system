@@ -20,7 +20,7 @@ public class Configuration implements Serializable {
     private String model2_wordvector_url;
     private String model1_similarity_url;
     private String model2_similarity_url;
-    
+    private String poiPath;
     private String resourcePath; //cartella resources
 
   
@@ -34,6 +34,7 @@ public class Configuration implements Serializable {
             this.likesPath = this.resourcePath + "likes/";
             this.wikidataPath = this.resourcePath + "wikidata/";
             this.similarityPath = this.resourcePath + "similarity/";
+        	this.poiPath = this.resourcePath + "poi/";
             this.model1_wordvector_url = prop.getProperty("model1_wordvector.url");
             this.model2_wordvector_url = prop.getProperty("model2_wordvector.url");
             this.model1_similarity_url = prop.getProperty("model1_similarity.url");
@@ -93,7 +94,8 @@ public class Configuration implements Serializable {
 	public String getModel2_similarity_url() {
 		return model2_similarity_url;
 	}
-    
-    
-	
+
+	public String getPoiPath() {
+		return poiPath;
+	}	
 }

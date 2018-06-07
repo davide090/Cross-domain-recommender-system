@@ -1,8 +1,9 @@
-package uniroma3.it.sii.profile;
+package uniroma3.it.sii.FBprofile;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
 import com.restfb.Parameter;
 import com.restfb.types.Page;
+import com.restfb.types.Place;
 import com.restfb.types.User;
 
 import uniroma3.it.sii.conf.Configuration;
@@ -39,7 +41,7 @@ public class FacebookManager {
 		String id = getUserID();
 
 		Configuration conf = Configuration.getInstance();
-		
+
 		File file = new File(conf.getLikesPath() + id + "@likes.txt");
 
 		PrintWriter out = new PrintWriter(file);
@@ -47,7 +49,7 @@ public class FacebookManager {
 		out.close();
 		cleanResult(file);
 
-		
+
 		return file.getAbsolutePath();
 
 	}
@@ -61,7 +63,7 @@ public class FacebookManager {
 		String id = getUserID();
 
 		Configuration conf = Configuration.getInstance();
-		
+
 		File file = new File(conf.getLikesPath() + id + "@movies.txt");
 
 		PrintWriter out = new PrintWriter(file);
@@ -69,13 +71,13 @@ public class FacebookManager {
 		out.close();
 		cleanResult(file);
 
-		
+
 		return file.getAbsolutePath();
 	}
 
 
-	
-	
+
+
 	//riceve i like di un utente relativi a pagine musicali
 	public String getMusicLikes() throws IOException {
 
@@ -89,14 +91,14 @@ public class FacebookManager {
 		goNext(fetchConnection, out);
 		out.close();
 		cleanResult(file);
-		
+
 		return file.getAbsolutePath();
 	}
 
-	
-	
-	
-	
+
+
+
+
 	//id facebook dell'utente (usato per salvare il suo profilo)
 	public String getUserID() {
 
@@ -111,7 +113,7 @@ public class FacebookManager {
 
 		for (Page p : fetchConnection.getData()){
 			out.println(p.getName());
-			System.out.println( " ------------ name ----------- " + p.getName());
+			//System.out.println( " ------------ name ----------- " + p.getName());
 		}
 
 		//next page of likes
@@ -121,34 +123,61 @@ public class FacebookManager {
 		}
 	}
 
-	
-	// input un file txt, sostituisce ogni spazio con underscore
-		public static void cleanResult(File file) throws IOException {
 
+	//riceve da fb i poi relativi alle categorie education e arts_entertainment ad un massimo di DISTANCE metri dalla posizione dell'utente
+	public String getPOI_FB(String latitude, String longitude, String distance) throws FileNotFoundException {
 
-			String linea;
-			Configuration conf = Configuration.getInstance();
+		Configuration conf = Configuration.getInstance();
+		String id = getUserID();
+		File file = new File(conf.getPoiPath() + id + "@poi.txt");
 
-			File temp = new File(conf.getLikesPath() + "tmp.txt");
-			FileReader fr = new FileReader(file);
-			BufferedReader br = new BufferedReader(fr);
-			FileWriter fw = new FileWriter(temp);
-			BufferedWriter bw = new BufferedWriter(fw);
+		Connection<Place> publicSearch =  this.facebookClient.fetchConnection("search", Place.class, Parameter.with("type", "place"),
+				Parameter.with("categories", "['EDUCATION','ARTS_ENTERTAINMENT']"), Parameter.with("center", latitude + "," + longitude),
+				Parameter.with("distance", distance));
 
+		PrintWriter out = new PrintWriter(file);
+		int i = 1;
 
-			while ((linea = br.readLine())!= null) {
-				bw.write(linea.replaceAll(" ", "_").replaceAll("-", "_").replaceAll("'", ""));
-				bw.newLine(); 
+		while(i<=10) {
+			for(Place p : publicSearch.getData()) {
+				out.println(p.getName());
+				i++;
 			}
-
-			br.close();
-			bw.close();
-			file.delete();
-			temp.renameTo(file);
-
-
 		}
-	
+
+		out.close();
+		return file.getAbsolutePath();
+	}
+
+
+
+	// input un file txt, sostituisce ogni spazio con underscore
+	public static void cleanResult(File file) throws IOException {
+
+
+		String linea;
+		Configuration conf = Configuration.getInstance();
+
+		File temp = new File(conf.getLikesPath() + "tmp.txt");
+		FileReader fr = new FileReader(file);
+		BufferedReader br = new BufferedReader(fr);
+		FileWriter fw = new FileWriter(temp);
+		BufferedWriter bw = new BufferedWriter(fw);
+
+
+		while ((linea = br.readLine())!= null) {
+			bw.write(linea.replaceAll(" ", "_").replaceAll("-", "_").replaceAll("'", ""));
+			bw.newLine(); 
+		}
+
+		br.close();
+		bw.close();
+		file.delete();
+		temp.renameTo(file);
+
+
+	}
+
 
 
 	//Getters & Setters

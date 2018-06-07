@@ -7,17 +7,25 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
+import uniroma3.it.sii.FBprofile.FacebookManager;
 import uniroma3.it.sii.conf.Configuration;
-import uniroma3.it.sii.profile.FacebookManager;
 import uniroma3.it.sii.similarity.RecommenderEngine;
 import uniroma3.it.sii.wikidata.WikidataManager;
 
@@ -27,6 +35,74 @@ public class RecommenderController {
 
 
 	//	@RequestParam(name="name", required=false, defaultValue="World") String name, Model model
+
+
+	@RequestMapping(value = "recommendation/{accessToken}/{city}/{country}/{attractions}/{likes}/{latitude}/{longitude}/lista/", method = RequestMethod.POST)
+	public String lista(HttpServletRequest req, @PathVariable String accessToken, Model model ) throws IOException {
+
+		Map<String, String[]> parameterMap = req.getParameterMap();
+		List<String> correctList = new ArrayList<>();
+		List<String> ignoreList = new ArrayList<>();
+		List<String> lista_A = new ArrayList<>();
+		List<String> lista_B = new ArrayList<>();
+
+
+		Configuration conf = Configuration.getInstance();
+		FacebookManager fb = new FacebookManager(accessToken);
+		String user_id = fb.getUserID();
+
+
+
+		File file_fb_poi = new File(conf.getPoiPath() + user_id + "@poi.txt");
+
+
+		for (Entry<String, String[]> entry : parameterMap.entrySet()) {
+//			System.out.println(entry.getKey() + " = " + Arrays.toString(entry.getValue()));
+//			System.out.println("è uguale a [si] -------> " + Arrays.toString(entry.getValue()).equals("[yes]"));
+			if(Arrays.toString(entry.getValue()).equals("[yes]")) {
+				correctList.add(entry.getKey());
+			}
+
+			if(Arrays.toString(entry.getValue()).equals("[unknown]")) {
+				ignoreList.add(entry.getKey());
+			}
+			
+			FileReader fr = new FileReader(file_fb_poi);
+			BufferedReader reader = new BufferedReader(fr);
+			boolean inB = false;
+			String linea;
+
+			while((linea = reader.readLine()) != null) {
+				if(linea.equals(entry.getKey())){
+					lista_B.add(linea);
+					inB = true;
+				}
+			}
+			reader.close();
+			
+			if(!inB)
+				lista_A.add(entry.getKey());
+		}
+
+		
+		double ndcgValA = NDCG_String.compute(lista_A, correctList, ignoreList);
+		System.out.println("NDCG Value lista A: " + ndcgValA);
+
+		double ndcgValB = NDCG_String.compute(lista_B, correctList, ignoreList);
+		System.out.println("NDCG Value lista B: " + ndcgValB);
+
+				
+		model.addAttribute("dcgA", ndcgValA);
+		model.addAttribute("listA", lista_A);
+		
+		model.addAttribute("dcgB", ndcgValB);
+		model.addAttribute("listB", lista_B);
+
+		
+		
+		
+		return "list";
+	}
 
 	@GetMapping("recommendation/{accessToken}/{city}/{country}/{attractions}/{likes}/{latitude}/{longitude}/{raggio}")
 	public String greeting(@PathVariable String accessToken, @PathVariable String city, @PathVariable String country, @PathVariable String[] attractions, 
@@ -65,9 +141,11 @@ public class RecommenderController {
 			longitude = wiki.getLongitude(citta, paese);
 
 			filesOrderedData.addAll(fetchOrderedWikidata(attractions, city, latitude, longitude, raggio));
-
 		}
 
+		List<String> fb_poi = fetchFB_POI(accessToken,latitude,longitude,raggio);
+
+		
 		List<String> res1 = recommendation1(filesFB, filesData);
 		List<String> results1 = new ArrayList<>();
 
@@ -86,7 +164,7 @@ public class RecommenderController {
 			String linea;
 
 			while((linea = reader.readLine()) != null) {
-				if(Double.parseDouble(linea.substring(linea.indexOf(":")+1)) >= 0.01)
+				if(Double.parseDouble(linea.substring(linea.indexOf(":")+1)) >= 0.3)
 					results1.add(linea);	
 			}
 			reader.close();
@@ -103,7 +181,7 @@ public class RecommenderController {
 			String linea;
 
 			while((linea = reader.readLine()) != null) {
-				if(Double.parseDouble(linea.substring(linea.indexOf(":")+1)) >= 0.01)
+				if(Double.parseDouble(linea.substring(linea.indexOf(":")+1)) >= 0.3)
 					results2.add(linea);	
 			}
 			reader.close();
@@ -125,8 +203,8 @@ public class RecommenderController {
 		System.out.println("list 2 vuota --- > " + results2.isEmpty());
 
 
-		model.addAttribute("list1", results1);
-		model.addAttribute("list2", results2);
+		//		model.addAttribute("list1", results1);
+		//		model.addAttribute("list2", results2);
 		model.addAttribute("tot", tot);
 
 
@@ -139,11 +217,115 @@ public class RecommenderController {
 		List<String> totOrderedDavide = new ArrayList<>();
 		totOrderedDavide = sortByDistance(orderDavideTotalRecommendation(tot, pathOrderedData));
 
-		model.addAttribute("totOrdered", totOrdered);
-		model.addAttribute("totOrderedDavide", totOrderedDavide);
+		System.out.println("list ordered davide vuota --- > " + totOrdered.isEmpty());
 
+
+		totOrdered = getPoi(totOrdered);
+		totOrderedDavide = getPoi(totOrderedDavide);
+
+//		model.addAttribute("totOrdered", totOrdered);		
+//		model.addAttribute("totOrderedDavide", totOrderedDavide);
+//		model.addAttribute("poi_fb", fb_poi);
+
+		System.out.println("poi_fb vuota ------> "  + fb_poi.isEmpty());
+
+		HashMap<String, String> tmp_map = new HashMap<>();
+		HashMap<String, String> map = new HashMap<>();
+//		HashMap<String,String> mappa_id = new HashMap<>();
+
+		for(String a : totOrderedDavide) {
+			tmp_map.put(a, "no");
+			//Lista A sono i poi suggeriti dal sistema
+//			mappa_id.put("A", a);
+		}
+
+		for(String b : fb_poi) {
+			tmp_map.put(b,"no");
+			//Lista B sono i poi suggeriti da fb
+//			mappa_id.put("B", b);
+		}
+
+		List<String> keys = new ArrayList<>();
+		keys.addAll(tmp_map.keySet());
+		Collections.shuffle(keys);
+
+		for (String o : keys) {
+			// Access keys/values in a random order
+			map.put(o,"no");
+		}
+
+//		model.addAttribute("mappa_id", mappa_id);
+		model.addAttribute("map", map);
+
+		for(String path : filesFB) {
+			File file = new File(path);
+			file.delete();
+		}
+
+		for(String path : filesData) {
+			File file = new File(path);
+			file.delete();
+		}
+
+		for(String path : filesOrderedData) {
+			File file = new File(path);
+			file.delete();
+		}
+
+
+		if(totOrdered.isEmpty() | totOrderedDavide.isEmpty())
+			return "no_result";
 
 		return "results";
+	}
+
+
+
+
+
+	private List<String> getPoi(List<String> lista) {
+
+
+		List<String> l = new ArrayList<>();
+
+		try {
+			for(String a : lista) {
+
+				String tmp = a.split(":")[0].replaceAll("_", " ");
+				System.out.println("tmp ---> " + tmp);
+				l.add(tmp);
+			}
+		}
+		catch (Exception e) {
+
+			return lista;
+		}
+
+
+		return l;
+	}
+
+	private List<String> fetchFB_POI(String accessToken, String latitude, String longitude, String raggio) throws IOException {
+
+		FacebookManager fb = new FacebookManager(accessToken);
+		int distance = Integer.valueOf(raggio)*1000;
+
+		String file_fb_poi = fb.getPOI_FB(latitude, longitude, String.valueOf(distance));
+
+		File file = new File(file_fb_poi);
+		List<String> fb_poi = new ArrayList<>();
+
+		FileReader fr = new FileReader(file);
+		BufferedReader dataReader = new BufferedReader(fr);
+		String linea;
+
+		while((linea = dataReader.readLine()) != null) {
+			fb_poi.add(linea);
+		}
+		dataReader.close();
+		fr.close();
+
+		return fb_poi;
 	}
 
 
@@ -166,7 +348,7 @@ public class RecommenderController {
 					.collect(Collectors.toList()); 
 
 
-			System.out.println("res: " + result.toString());
+			//			System.out.println("res: " + result.toString());
 
 			double m = 0.0;
 
@@ -218,7 +400,7 @@ public class RecommenderController {
 				String sim = s.split(":")[1];
 
 				if(poi.equals(poiOrdered)) {
-					System.out.println("poi: " + poi + ", orde: " + poiOrdered + ", position: " + position);
+					//					System.out.println("poi: " + poi + ", orde: " + poiOrdered + ", position: " + position);
 					String tmpRes = poi + ":" + String.valueOf(Double.parseDouble(sim) / position);
 					res.add(tmpRes);
 				}
@@ -381,7 +563,7 @@ public class RecommenderController {
 		List<String> filePath = new ArrayList<String>();
 		WikidataManager wiki = new WikidataManager();
 
-		wiki.userInCity(city, latitude, longitude);
+		//wiki.userInCity(city, latitude, longitude);
 
 		for(int i =0; i<params.length; i++) {
 			String path = getOrderedData(wiki, params[i], city, latitude, longitude, raggio);

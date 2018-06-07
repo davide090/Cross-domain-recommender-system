@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:b="http://bootsfaces.net/ui"
+	xmlns:form="http://www.springframework.org/tags/form"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+<head>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<title>Results</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+
+	<div id="container" class="container">
+
+
+		<br />
+		<p>
+			<font size="5"><b>Points of interest recommended for you!
+			</b></font>
+		</p>
+
+		<br /> <br /> <a href="http://localhost:5000/">Home</a> <br /><br />
+
+		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+			<label>DCG value: </label><label th:text="${dcgA}"></label><br/>
+			<th:block th:object="${item}" th:each="item : ${listA}">
+				<div>
+					<label th:text="${item}"></label>
+				</div>
+			</th:block>
+		</div>
+
+		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+			<label>DCG value: </label><label th:text="${dcgB}"></label><br />
+			<th:block th:object="${item}" th:each="item : ${listB}">
+				<div>
+					<label th:text="${item}"></label>
+				</div>
+			</th:block>
+		</div>
+
+	</div>
+</body>
+</html>

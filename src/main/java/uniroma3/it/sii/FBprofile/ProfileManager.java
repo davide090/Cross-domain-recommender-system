@@ -1,4 +1,4 @@
-package uniroma3.it.sii.profile;
+package uniroma3.it.sii.FBprofile;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

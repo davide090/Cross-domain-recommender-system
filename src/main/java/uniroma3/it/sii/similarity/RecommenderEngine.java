@@ -116,7 +116,7 @@ public class RecommenderEngine {
 				//scorre il file contenente i punti di interesse (ripulito)
 				while((linea = dataReader.readLine()) != null) {
 
-					System.out.println("similarita fra " + keyword +"/"+linea);
+//					System.out.println("similarita fra " + keyword +"/"+linea);
 					List<String> words = Arrays.asList(linea.substring(linea.indexOf("[")+1, linea.indexOf("]")).split(","));
 					List<Double> sims = new ArrayList<>();
 
@@ -191,7 +191,7 @@ public class RecommenderEngine {
 				//scorre il file contenente i punti di interesse (ripulito)
 				while((linea = dataReader.readLine()) != null) {
 
-					System.out.println("similarita fra " + keyword +"/"+linea);
+//					System.out.println("similarita fra " + keyword +"/"+linea);
 					List<String> words = Arrays.asList(linea.substring(linea.indexOf("[")+1, linea.indexOf("]")).split(","));
 					List<Double> sims = new ArrayList<>();
 
@@ -286,7 +286,7 @@ public class RecommenderEngine {
 			}
 
 			if(esiste) {
-				System.out.println(currentLine+wordsOK.toString());
+//				System.out.println(currentLine+wordsOK.toString());
 				String stringa = (currentLine+wordsOK.toString()).replaceAll(" ", "");
 				writer.write(stringa);
 				writer.newLine();
@@ -326,7 +326,7 @@ public class RecommenderEngine {
 			}
 
 			if(esiste) {
-				System.out.println(currentLine+wordsOK.toString());
+//				System.out.println(currentLine+wordsOK.toString());
 				String stringa = (currentLine+wordsOK.toString()).replaceAll(" ", "");
 				writer.write(stringa);
 				writer.newLine();
@@ -378,11 +378,11 @@ public class RecommenderEngine {
 
 
 			if(response.toString().equals("null")) {
-				System.out.println(word + " riconosciuto come null");
+//				System.out.println(word + " riconosciuto come null");
 				return false;
 			}
 
-			System.out.println("response "+ word +": " + response);
+//			System.out.println("response "+ word +": " + response);
 
 			connection.disconnect();
 			exist = true;
@@ -390,7 +390,7 @@ public class RecommenderEngine {
 			return exist;
 
 		} catch (IOException e) {
-			System.out.println("non esiste in model 1: " + word);
+//			System.out.println("non esiste in model 1: " + word);
 			// TODO Auto-generated catch block
 			return false;
 		}
@@ -468,14 +468,14 @@ public class RecommenderEngine {
 			rd.close();
 			res.close();
 
-			System.out.println("response "+ word +": " + response);
+//			System.out.println("response "+ word +": " + response);
 
 			connection.disconnect();
 			return true;
 
 		} catch (InternalServerErrorException | IOException e) {
 
-			System.out.println("non esiste model 2: " + word);
+//			System.out.println("non esiste model 2: " + word);
 			return false;
 		}
 

@@ -736,7 +736,8 @@ public class WikidataManager {
 		}
 
 		qexec.close();
-
+		System.out.println("in city ----> " + inCity);
+		
 		return inCity;
 
 	}

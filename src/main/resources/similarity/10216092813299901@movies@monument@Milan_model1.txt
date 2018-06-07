@@ -3,11 +3,12 @@ Dunkirk/Porta_Romana:0.07804279094039746
 Dunkirk/equestrian_statue_of_Napoléon_III:0.07487243747834245
 Dunkirk/Monument_of_the_Five_Days_of_Milan:0.1857478410527379
 Dunkirk/Monumento_ai_Caduti_di_Niguarda:0.039378240287993395
-Dunkirk/Verziere_Column:0.030020460354872512
 Dunkirk/Arch_of_Peace:0.09135244543013689
+Dunkirk/Verziere_Column:0.030020460354872512
 Dunkirk/monument_to_Victor_Emmanuel_II:0.1331482420260157
 Dunkirk/Monument_to_Alessandro_Manzoni:0.1857478410527379
 Dunkirk/Tree_of_Life:0.044898138353585394
+Dunkirk/Monument_to_Giuseppe_Missori:0.1857478410527379
 Dunkirk/Civico_Mausoleo_Palanti:0.09855237595350476
 Dunkirk/Shoah_memorial:0.18086152340526282
 Dunkirk/Verziere_Column:0.030020460354872512
@@ -16,11 +17,12 @@ Star_Wars/Porta_Romana:0.09034694222574914
 Star_Wars/equestrian_statue_of_Napoléon_III:0.02853712117437996
 Star_Wars/Monument_of_the_Five_Days_of_Milan:-0.004270101654443754
 Star_Wars/Monumento_ai_Caduti_di_Niguarda:0.17115527139398207
-Star_Wars/Verziere_Column:-0.040471774489337496
 Star_Wars/Arch_of_Peace:0.04808368083824234
+Star_Wars/Verziere_Column:-0.040471774489337496
 Star_Wars/monument_to_Victor_Emmanuel_II:-0.01526989445651618
 Star_Wars/Monument_to_Alessandro_Manzoni:0.12591971014563397
 Star_Wars/Tree_of_Life:-0.15558254699041096
+Star_Wars/Monument_to_Giuseppe_Missori:0.1587072774393363
 Star_Wars/Civico_Mausoleo_Palanti:0.20501649517629186
 Star_Wars/Shoah_memorial:0.1166472925217708
 Star_Wars/Verziere_Column:-0.040471774489337496

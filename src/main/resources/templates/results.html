@@ -39,7 +39,7 @@
 			</div> -->
 
 
-			<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+			<!-- <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
 				<div th:if="${tot != null}">
 					<h1>Total Results</h1>
 					<br />
@@ -49,7 +49,7 @@
 						</th:block>
 					</ul>
 				</div>
-			</div>
+			</div> -->
 
 
 
@@ -66,7 +66,7 @@
 			</div> -->
 
 
-			<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+			<!-- <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
 				<div th:if="${totOrdered != null}">
 					<h1>Tot Ordered</h1>
 					<br />
@@ -76,9 +76,38 @@
 						</th:block>
 					</ul>
 				</div>
-			</div>
+			</div> -->
 
-			<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+			<form th:action="@{lista/}" method="post" th:object="${map}">
+
+				<th:block th:object="${item}" th:each="item : ${map}">
+					<div>
+						<label th:text="${item.key}"></label> <label><input
+							th:name="*{key}" type="radio" title="Yes" value="yes">
+							Yes </label> <label><input type="radio" th:name="*{key}"
+							title="No" value="no"> No </label><label><input type="radio" th:name="*{key}"
+							title="No" value="unknown"> Unknown </label></br> </br>
+					</div>
+				</th:block>
+				<input type="submit" value="Submit" />
+
+			</form>
+
+
+
+			<!-- <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+				<div th:if="${poi_fb != null}">
+					<h1>Tot Ordered Davide</h1>
+					<br />
+					<ul>
+						<th:block th:object="${item}" th:each="item : ${poi_fb}">
+							<li th:text="${item}">Item description here...</li>
+						</th:block>
+					</ul>
+				</div>
+			</div> -->
+
+			<!-- <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
 				<div th:if="${totOrderedDavide != null}">
 					<h1>Tot Ordered Davide</h1>
 					<br />
@@ -88,9 +117,7 @@
 						</th:block>
 					</ul>
 				</div>
-			</div>
-
-
+			</div> -->
 		</div>
 	</div>
 </body>
