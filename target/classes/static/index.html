@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Recommender System</title>
+
+
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+
+	<script>
+		function facebookLogin() {
+			var FB = window.FB;
+			var scopes = 'email,public_profile,user_likes';
+
+			FB
+					.login(
+							function(response) {
+								if (response.status === 'connected') {
+									console.log('The user has logged in!');
+									var access_token = FB.getAuthResponse()['accessToken'];
+									var token = access_token.value;
+									var userID = FB.getAuthResponse()['userID'];
+									console.log('Access Token = '
+											+ access_token);
+									document.getElementById('accessToken').value = String(access_token);
+									console.log('user ID = ' + userID);
+
+									FB.api('/me', function(response) {
+										console.log('Good to see you, '
+												+ response.name + '.');
+									});
+								}
+							}, {
+								scope : scopes
+							});
+		}
+
+		window.fbAsyncInit = function() {
+			FB.init({
+				appId : '184999568774508',
+				cookie : true,
+				xfbml : true,
+				version : 'v2.12'
+			});
+		};
+
+		(function(d, s, id) {
+			var js, fjs = d.getElementsByTagName(s)[0];
+			if (d.getElementById(id)) {
+				return;
+			}
+			js = d.createElement(s);
+			js.id = id;
+			js.src = "//connect.facebook.net/it_IT/sdk.js";
+			fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));
+	</script>
+
+	<script>
+		function logout() {
+			FB.logout(function(response) {
+				// Person is now logged out
+				console.log("user logged out");
+			});
+		};
+	</script>
+
+
+	<script type="text/javascript">
+		$(document)
+				.ready(
+						function() {
+
+							$('#button')
+									.click(
+											function(e) {
+												var city = $("#city").val();
+												var country = $("#country")
+														.val();
+												var access = $("#accessToken")
+														.val();
+												var currentLocation = window.location;
+												var attractions = [];
+												var likes = [];
+												var latitude = $("#latitude")
+														.val();
+												var longitude = $("#longitude")
+														.val();
+												var raggio = $("#raggio").val();
+												console.log(latitude)
+												console.log(longitude)
+												if (document
+														.getElementById("churchs").checked == true)
+													attractions.push($(
+															"#churchs").val());
+
+												if (document
+														.getElementById("museums").checked == true)
+													attractions.push($(
+															"#museums").val());
+
+												if (document
+														.getElementById("monuments").checked == true)
+													attractions
+															.push($(
+																	"#monuments")
+																	.val());
+
+												if (document
+														.getElementById("tourist").checked == true)
+													attractions.push($(
+															"#tourist").val());
+
+												if (document
+														.getElementById("ss").checked == true)
+													attractions.push($("#ss")
+															.val());
+
+												if (document
+														.getElementById("music").checked == true)
+													likes.push($("#music")
+															.val());
+
+												if (document
+														.getElementById("movies").checked == true)
+													likes.push($("#movies")
+															.val());
+
+												if (document
+														.getElementById("all").checked == true)
+													likes.push($("#all").val());
+
+												console.log(attractions);
+												console.log(likes);
+
+												window.location
+														.replace(currentLocation
+																+ "recommendation/"
+																+ access
+																+ "/"
+																+ city
+																+ "/"
+																+ country
+																+ "/"
+																+ attractions
+																+ "/"
+																+ likes
+																+ "/"
+																+ latitude
+																+ "/"
+																+ longitude
+																+ "/" + raggio);
+
+											});
+						});
+	</script>
+
+	<div id="container" class="container">
+
+		<footer>
+			<img src="img/logo_roma3.jpg" width="250px" align="top" />
+		</footer>
+		<br /> <br />
+		<p>
+			<font size="5"><b>Cross-domain recommender system</b></font>
+		</p>
+		<br />
+
+
+		<ul class="nav nav-tabs">
+			<li class="active"><a data-toggle="pill" href="#main">Recommender</a></li>
+		</ul>
+
+
+		<div id="content" class="tab-content">
+			<!--  DIV DELLA HOME -->
+			<div id="main" class="tab-pane fade in active">
+
+				<br />
+				<p>
+					<font size="4">Effettuare l'accesso a Facebook per
+						consentire la profilazione</font>
+				</p>
+				<br />
+				<button type="button" class="btn btn-primary"
+					onclick="facebookLogin()">Facebook login</button>
+
+				<button type="button" class="btn btn-primary" onclick="logout()">Facebook
+					logout</button>
+
+				<br /> <br /> <br />
+				<p>
+					<font size="4">Inserire il Paese e la città di interesse (in
+						inglese):</font>
+				</p>
+				<!-- <input type="text" id="city"> Città <input
+					type="text" id="country"> Paese <input type="text"
+					id="accessToken" hidden="true"> <br />
+					 -->
+
+
+				<form>
+					<div class="form-group">
+						<label for="usr">Città:</label> <input type="text"
+							class="form-control" id="city">
+					</div>
+					<div class="form-group">
+						<label for="country">Paese:</label> <input type="text"
+							class="form-control" id="country">
+					</div>
+					<div class="form-group">
+						<input type="text" id="accessToken" hidden="true">
+					</div>
+				</form>
+
+
+				<br /> <br />
+				<p>
+					<font size="4">Rileva posizione:</font>
+				</p>
+
+				<button type="button" class="btn btn-secondary"
+					onclick="getLocation()">Get Position</button>
+				<br /> <br /> <label for="latitude">Latitude: </label>
+				<output id="latitude"></output>
+				<br /> <label for="longitude">Longitude: </label>
+				<output id="longitude"></output>
+				<br />
+				<form>
+					<div class="form-group">
+						<label for="raggio">Distanza massima (km):</label> <input
+							type="text" class="form-control" id="raggio">
+					</div>
+				</form>
+
+				<script>
+					var x = document.getElementById("latitude");
+					var y = document.getElementById("longitude");
+					function getLocation() {
+						if (navigator.geolocation) {
+							navigator.geolocation
+									.getCurrentPosition(showPosition);
+						} else {
+							x.innerHTML = "Geolocation is not supported by this browser.";
+						}
+					}
+
+					function showPosition(position) {
+
+						x.value = position.coords.latitude
+						y.value = position.coords.longitude;
+						console.log("Latitude: " + x.value + ", Longitude: "
+								+ y.value)
+					}
+				</script>
+
+				<br /> <br />
+				<p>
+					<font size="4">Selezionare la tipologia di attrazioni di
+						interesse:</font>
+				</p>
+
+				<form>
+					<label class="checkbox"> <input type="checkbox"
+						name="churchs" id="churchs" value="churchs">Churchs
+					</label> <label class="checkbox"> <input type="checkbox"
+						id="museums" value="museums">Museums
+					</label> <label class="checkbox"> <input type="checkbox"
+						id="monuments" value="monuments">Monuments
+					</label> <label class="checkbox"> <input type="checkbox" id="ss"
+						value="squares">Squares
+					</label> <label class="checkbox"> <input type="checkbox"
+						id="tourist" value="tourist">Tourist locations
+					</label>
+				</form>
+				<br /> <br />
+				<p>
+					<font size="4">Selezionare la tipologia di profilazione di
+						interesse:</font>
+				</p>
+
+				<form>
+					<label class="checkbox"> <input type="checkbox"
+						name="music" id="music" value="music">Music Likes
+					</label> <label class="checkbox"> <input type="checkbox"
+						id="movies" value="movies">Movies Likes
+					</label> <label class="checkbox"> <input type="checkbox" id="all"
+						value="all">All Likes
+					</label>
+				</form>
+
+				<br />
+				<button type="button" class="btn btn-success" id="button">Get
+					Recommendation</button>
+				<br> <br>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

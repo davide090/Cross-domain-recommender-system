@@ -1,0 +1,23 @@
+# application.yml
+
+---
+
+server:
+  port: 5000
+  
+  
+spring:
+  profiles: recommendation
+  application:
+     name: recommendation
+   
+   
+
+---
+
+spring:
+  profiles:
+    active:
+    - recommendation
+    
+    

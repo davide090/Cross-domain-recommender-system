@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Title: Progetto_SII
+Implementation-Version: 0.0.1-SNAPSHOT
+Built-By: davide
+Implementation-Vendor-Id: uniroma3.it.sii
+Build-Jdk: 1.8.0_131
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
+ ot-starter-parent/Progetto_SII
+Created-By: Maven Integration for Eclipse
+

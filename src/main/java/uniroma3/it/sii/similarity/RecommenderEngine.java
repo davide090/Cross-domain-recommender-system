@@ -47,7 +47,6 @@ public class RecommenderEngine {
 			}
 		}
 
-
 		return results;
 	}
 

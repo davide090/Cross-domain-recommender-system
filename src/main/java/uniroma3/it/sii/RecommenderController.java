@@ -57,8 +57,8 @@ public class RecommenderController {
 
 
 		for (Entry<String, String[]> entry : parameterMap.entrySet()) {
-//			System.out.println(entry.getKey() + " = " + Arrays.toString(entry.getValue()));
-//			System.out.println("è uguale a [si] -------> " + Arrays.toString(entry.getValue()).equals("[yes]"));
+			//			System.out.println(entry.getKey() + " = " + Arrays.toString(entry.getValue()));
+			//			System.out.println("è uguale a [si] -------> " + Arrays.toString(entry.getValue()).equals("[yes]"));
 			if(Arrays.toString(entry.getValue()).equals("[yes]")) {
 				correctList.add(entry.getKey());
 			}
@@ -66,7 +66,7 @@ public class RecommenderController {
 			if(Arrays.toString(entry.getValue()).equals("[unknown]")) {
 				ignoreList.add(entry.getKey());
 			}
-			
+
 			FileReader fr = new FileReader(file_fb_poi);
 			BufferedReader reader = new BufferedReader(fr);
 			boolean inB = false;
@@ -79,28 +79,28 @@ public class RecommenderController {
 				}
 			}
 			reader.close();
-			
+
 			if(!inB)
 				lista_A.add(entry.getKey());
 		}
 
-		
+
 		double ndcgValA = NDCG_String.compute(lista_A, correctList, ignoreList);
 		System.out.println("NDCG Value lista A: " + ndcgValA);
 
 		double ndcgValB = NDCG_String.compute(lista_B, correctList, ignoreList);
 		System.out.println("NDCG Value lista B: " + ndcgValB);
 
-				
+
 		model.addAttribute("dcgA", ndcgValA);
 		model.addAttribute("listA", lista_A);
-		
+
 		model.addAttribute("dcgB", ndcgValB);
 		model.addAttribute("listB", lista_B);
 
-		
-		
-		
+
+
+
 		return "list";
 	}
 
@@ -145,7 +145,7 @@ public class RecommenderController {
 
 		List<String> fb_poi = fetchFB_POI(accessToken,latitude,longitude,raggio);
 
-		
+
 		List<String> res1 = recommendation1(filesFB, filesData);
 		List<String> results1 = new ArrayList<>();
 
@@ -223,28 +223,37 @@ public class RecommenderController {
 		totOrdered = getPoi(totOrdered);
 		totOrderedDavide = getPoi(totOrderedDavide);
 
-//		model.addAttribute("totOrdered", totOrdered);		
-//		model.addAttribute("totOrderedDavide", totOrderedDavide);
-//		model.addAttribute("poi_fb", fb_poi);
+		//		model.addAttribute("totOrdered", totOrdered);		
+		//		model.addAttribute("totOrderedDavide", totOrderedDavide);
+		//		model.addAttribute("poi_fb", fb_poi);
 
 		System.out.println("poi_fb vuota ------> "  + fb_poi.isEmpty());
 
 		HashMap<String, String> tmp_map = new HashMap<>();
 		HashMap<String, String> map = new HashMap<>();
-//		HashMap<String,String> mappa_id = new HashMap<>();
+		//		HashMap<String,String> mappa_id = new HashMap<>();
 
+		int max = 1;
 		for(String a : totOrderedDavide) {
+
+			if(max>10)
+				break;
 			tmp_map.put(a, "no");
+
 			//Lista A sono i poi suggeriti dal sistema
-//			mappa_id.put("A", a);
+			//			mappa_id.put("A", a);
 		}
+
+		max=1;
 
 		for(String b : fb_poi) {
+
+			if(max>10)
+				break;
 			tmp_map.put(b,"no");
 			//Lista B sono i poi suggeriti da fb
-//			mappa_id.put("B", b);
+			//			mappa_id.put("B", b);
 		}
-
 		List<String> keys = new ArrayList<>();
 		keys.addAll(tmp_map.keySet());
 		Collections.shuffle(keys);
@@ -254,7 +263,7 @@ public class RecommenderController {
 			map.put(o,"no");
 		}
 
-//		model.addAttribute("mappa_id", mappa_id);
+		//		model.addAttribute("mappa_id", mappa_id);
 		model.addAttribute("map", map);
 
 		for(String path : filesFB) {
