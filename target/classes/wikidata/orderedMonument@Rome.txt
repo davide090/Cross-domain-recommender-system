@@ -1,7 +1,6 @@
 Guglielmo_Marconi_obelisk:2.516
 Tomb_of_Priscilla:3.232
 Arch_of_Drusus:3.489
-Tomb_of_the_Scipios:3.601
 Arch_of_Titus:3.631
 Novecento_obelisk:3.675
 Matteiano_obelisk:3.86
@@ -16,8 +15,9 @@ rostral_columns_of_Gaius_Duilius:4.301
 Colonne_rostrale_dAuguste:4.301
 Arch_of_Augustus:4.302
 Arches_of_Drusus:4.31
-Arch_of_Fabius:4.313
 Arch_of_Scipio_Africanus:4.313
+Arch_of_Fabius:4.313
+Lapis_Niger:4.327
 Column_of_Phocas:4.327
 Memorial_to_Ippolito_Merenda:4.335
 rostral_columns_of_Gaius_Duilius:4.346
@@ -45,7 +45,6 @@ Arch_of_Gratian,_Valentinian,_and_Theodosius:5.085
 Arch_of_Arcadius,_Hororius,_and_Theodosius:5.092
 Column_of_Antoninus_Pius:5.141
 Vatican_obelisk:5.213
-Meta_Romuli:5.219
 Saint_Peters_tomb:5.26
 Vatican_Grotto:5.262
 Tomb_of_the_Julii:5.262
@@ -57,3 +56,15 @@ Mausoleum_of_Augustus:5.633
 Dogali_obelisk:5.737
 Sallustiano_obelisk:5.739
 Arch_of_Sixtus_V:5.854
+obelisk_in_Villa_Medici_gardens:6.034
+Tomb_of_Hilarus_Fuscus:6.101
+Flaminio_Obelisk:6.138
+Pinciano_obelisk:6.191
+Propilei_egizi:6.524
+Monument_to_Nizami_Ganjavi_in_Rome:6.731
+Mausoleo_di_Lucilio_Peto:7.015
+Obelisks_in_villa_Torlonia:7.444
+Obelisks_in_villa_Torlonia:7.573
+Mussolini_obelisk:8.469
+Santa_Costanza:8.508
+Santa_Costanza:9.062
