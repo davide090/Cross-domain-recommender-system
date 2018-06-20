@@ -4,6 +4,8 @@
 
 <h4>Sistema di raccomandazione cross-dominio</h4>
 
+Modificare il file conf.properties inserendo in resource.path il path di una cartella in locale, che verrà utilizzata per salvare i file temporanei relativi a likes e punti di interesse, oltre che vari file per calcolare le raccomandazioni.
+
 Per avviare il servizio:
   - java -jar target/Progetto_SII-0.0.1-SNAPSHOT.jar
 
