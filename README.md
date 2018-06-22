@@ -20,7 +20,7 @@ oppure da eclipse:
   
   Una volta avviato, il servizio sarà disponibile sulla porta 5000.
 
-
+N.B. Per avviarlo su eclipse è necessario aver installato il plugin STS (Spring Tools Suite, al momento versione 3.9.4)
 
 
 <h5>Descrizione: </h5>
